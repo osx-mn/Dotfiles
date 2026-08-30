@@ -1,0 +1,108 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+format = """
+[╭─](dimmed white)$username$hostname$directory$git_branch$git_status
+[╰─](dimmed white)❯ """
+
+right_format = "$cmd_duration"
+
+
+[username]
+show_always = true
+style_user = "bold white"
+style_root = "bold red"
+format = "  [$user]($style)"
+
+
+[hostname]
+ssh_only = false
+ssh_symbol = ""
+style = "dimmed white"
+format = "[@$hostname](dimmed white) "
+
+
+[directory]
+style = "bold cyan"
+format = "[│](dimmed white) [$path]($style)"
+truncation_length = 3
+truncate_to_repo = false
+fish_style_pwd_dir_length = 0
+home_symbol = "~"
+
+
+[git_branch]
+symbol = "󰊢 "
+style = "dimmed white"
+format = "[│](dimmed white) [$symbol$branch]($style) "
+
+[git_status]
+style = "yellow"
+format = "[$all_status$ahead_behind]($style)"
+
+conflicted = " ${count}"
+ahead = " ${count}"
+behind = " ${count}"
+diverged = " ${ahead_count}/${behind_count}"
+untracked = " ${count}"
+stashed = " 󰆓${count}"
+modified = " ${count}"
+staged = " ${count}"
+renamed = " 󰁕${count}"
+deleted = " ${count}"
+
+
+[cmd_duration]
+min_time = 2000
+format = "[│ $duration](dimmed white)"
+show_milliseconds = true
+
+
+[package]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[python]
+disabled = true
+
+[rust]
+disabled = true
+
+[golang]
+disabled = true
+
+[php]
+disabled = true
+
+[java]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[conda]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[azure]
+disabled = true
+
+[terraform]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[time]
+disabled = true

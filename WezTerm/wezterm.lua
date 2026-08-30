@@ -41,7 +41,7 @@ config.cursor_blink_ease_out = 'EaseOut'
 -- =========================================================
 config.window_decorations = "RESIZE"
 config.integrated_title_button_style = "Windows"
-config.window_background_opacity = 0.85
+config.window_background_opacity = 0.80
 config.window_close_confirmation = "AlwaysPrompt" -- evita cerrar paneles con procesos vivos por accidente
 
 -- Un poco de aire interno para que el texto no quede pegado al borde
@@ -55,28 +55,57 @@ config.window_padding = {
 -- =========================================================
 -- 5. PESTAÑAS
 -- =========================================================
-config.use_fancy_tab_bar = true
-config.tab_bar_at_bottom = false
-config.hide_tab_bar_if_only_one_tab = false
-config.tab_max_width = 32
-
--- Título de pestaña: muestra el proceso activo (ej: pwsh, nvim, node)
--- en vez del texto por defecto, que a veces es poco útil.
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
     local title = tab.active_pane.title
     local index = tab.tab_index + 1
-    return string.format('  %d: %s  ', index, title)
+
+    -- Iconos Nerd Font por defecto
+    local status_icon = '| 󰄰' -- Círculo vacío (sin novedades)
+    local status_color = '#666666'
+
+    for _, pane in ipairs(tab.panes) do
+        if pane.has_unseen_output then
+            local proc = pane.foreground_process_name or ''
+            if proc:find('pwsh') then
+                status_icon = '| 󰄯' -- Logo de PowerShell + Icono de alerta/salida
+                status_color = '#9e1c1c' -- Rojo
+                break
+            else
+                status_icon = '| 󰄯' -- Check/Punto lleno
+                status_color = '#179937' -- Verde
+            end
+        end
+    end
+
+    return {
+        { Text = string.format('  %d: %s ', index, title) },
+        { Foreground = { Color = status_color } },
+        { Text = status_icon .. '  ' },
+    }
 end)
 
 -- =========================================================
 -- 6. BARRA DE ESTADO (esquina derecha del tab bar)
 -- =========================================================
 wezterm.on('update-status', function(window, pane)
-    local date = wezterm.strftime('%Y-%m-%d  %H:%M')
     local workspace = window:active_workspace()
+    local pid_status = ''
+
+    local info = pane:get_foreground_process_info()
+    if info then
+        -- El nombre del ejecutable es el primer elemento de argv
+        local exe = info.argv[1] or ''
+        local exe_name = exe:gsub('(.*[/\\])(.*)', '%2') -- se queda solo con el nombre, sin la ruta completa
+
+        -- Solo mostramos el PID si hay algo corriendo que NO sea el shell inactivo
+        if not exe_name:find('pwsh') then
+            pid_status = '  󰛸 ' .. exe_name .. ' (PID ' .. info.pid .. ')'
+        end
+    end
+
     window:set_right_status(wezterm.format({
         { Foreground = { Color = '#5C8374' } },
-        { Text = '  ' .. workspace .. '  |  ' .. date .. '  ' },
+        { Text = '  ' .. workspace .. pid_status .. '  ' },
     }))
 end)
 
@@ -97,24 +126,31 @@ config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 -- =========================================================
 config.launch_menu = {
     {
-        label = 'KINETIC Workspace',
+        label = '󰽰  KINETIC Workspace',
         args = {
             'pwsh.exe', '-NoExit', '-Command',
             'cd C:\\Users\\osxar\\Documents\\iA_PROJECTS\\SINTETIZADOR-SOLIDJS; bun run dev'
         },
     },
     {
-        label = 'PORTFOLIO Workspace',
+        label = '  PORTFOLIO Workspace',
         args = {
             'pwsh.exe', '-NoExit', '-Command',
             'cd C:\\Users\\osxar\\Documents\\webProjects\\portfolio; bun run dev'
         },
     },
     {
-        label = '📝 Abrir wezterm.lua (app predeterminada)',
+        label = '  Abrir wezterm.lua (app predeterminada)',
         args = {
             'pwsh.exe', '-NoExit', '-Command',
             'Invoke-Item "$env:USERPROFILE\\.wezterm.lua"',
+        },
+    },
+    {
+        label = '  Abrir starship.toml',
+        args = {
+            'pwsh.exe', '-NoExit', '-Command',
+            'Invoke-Item "$env:USERPROFILE\\.config\\starship.toml"'
         },
     },
 }

@@ -6,7 +6,7 @@ El objetivo es mantener una experiencia visual coherente y productiva entre la t
 
 ---
 
-## 📁 Contenido del Repositorio
+## Contenido del Repositorio
 
 | Carpeta | Herramienta | Descripción | Documentación |
 |---|---|---|---|
@@ -16,7 +16,7 @@ El objetivo es mantener una experiencia visual coherente y productiva entre la t
 
 ---
 
-## 🎨 Identidad Visual y Colores
+## Identidad Visual y Colores
 
 Todas las herramientas comparten la misma paleta cromática basada en tonos oscuros y contraste balanceado:
 
@@ -29,7 +29,7 @@ Todas las herramientas comparten la misma paleta cromática basada en tonos oscu
 
 ---
 
-## 🚀 Instalación y Despliegue
+## Instalación y Despliegue
 
 Cada subcarpeta corresponde a una herramienta. Copiar o crear enlaces simbólicos (*symlinks*) a las rutas correspondientes del sistema operativo:
 
@@ -47,6 +47,6 @@ Cada subcarpeta corresponde a una herramienta. Copiar o crear enlaces simbólico
 
 ---
 
-## 📖 Documentación Detallada
+## Documentación Detallada
 
 Para consultar el mapa de atajos de teclado, opciones específicas de cada configuración o requisitos del sistema, dirígete al `README.md` de cada herramienta.

@@ -1,163 +1,179 @@
 # Configuración de WezTerm
 
-Documentación del archivo `wezterm.lua`, configuración personalizada para la terminal [WezTerm](https://wezterm.org/).
+Documentación del archivo `wezterm.lua`, configuración personalizada para el emulador de terminal [WezTerm](https://wezterm.org/).
 
-## 1. Fuente
+---
 
-- Fuente: `JetBrains Mono`, peso `Medium`.
-- Tamaño: `10`.
+## 1. Tipografía y Fuente
 
-## 2. Colores
+- **Fuente:** `JetBrains Mono`, peso `Medium`.
+- **Tamaño:** `10 pt`.
 
-Esquema de color oscuro personalizado:
+---
 
-|Elemento|Color|
-|---|---|
-|Fondo|`#000000`|
-|Texto|`#93B1A6`|
-|Fondo del cursor|`#183D3D`|
-|Texto del cursor|`#51C1A4`|
+## 2. Paleta de Colores
 
-**Barra de pestañas (`tab_bar`):**
+Esquema de color oscuro personalizado con contraste suave y acentos esmeralda/turquesa:
 
-- Fondo general: `#000000`
-- Pestaña activa: fondo `#5C8374`, texto `#040D12`
-- Pestaña inactiva: fondo `#1a1a1a`, texto `#808080`
+| Elemento | Código Hexadecimal | Propósito / Apariencia |
+|---|---|---|
+| Fondo principal | `#000000` | Negro puro |
+| Texto principal | `#93B1A6` | Verde salvia suave |
+| Fondo del cursor | `#183D3D` | Verde petróleo profundo |
+| Texto del cursor | `#51C1A4` | Turquesa brillante (color de acento principal) |
+
+### Barra de pestañas (`tab_bar`)
+
+- **Fondo general:** `#000000`
+- **Pestaña activa:** Fondo `#5C8374`, Texto `#040D12`
+- **Pestaña inactiva:** Fondo `#1a1a1a`, Texto `#808080`
+
+---
 
 ## 3. Cursor
 
-- Estilo: `BlinkingUnderline` (subrayado parpadeante).
-- Velocidad de parpadeo: `400 ms`.
-- Curvas de animación: `EaseIn` / `EaseOut`.
+- **Estilo:** `BlinkingUnderline` (subrayado parpadeante).
+- **Velocidad de parpadeo:** `400 ms`.
+- **Curvas de animación:** `EaseIn` y `EaseOut` para una transición suave.
 
-## 4. Ventana
+---
 
-- Decoraciones: solo permite redimensionar (`RESIZE`), sin barra de título nativa.
-- Estilo de botones de título: `Windows`.
-- Opacidad del fondo: `0.80`.
-- Confirmación al cerrar: siempre pregunta (`AlwaysPrompt`) para evitar cerrar procesos activos por error.
-- Padding interno: `6px` izquierda/derecha, `4px` arriba/abajo.
+## 4. Ventana y Comportamiento
 
-## 5. Pestañas (título dinámico)
+- **Decoraciones:** Solo redimensionable (`RESIZE`), sin barra de título nativa clásica.
+- **Estilo de botones integrados:** `Windows`.
+- **Opacidad del fondo:** `0.80` (transparencia del 20%).
+- **Confirmación al cerrar:** `AlwaysPrompt` (solicita confirmación antes de cerrar procesos activos).
+- **Márgenes internos (*padding*):** `6px` laterales (izquierda/derecha), `4px` verticales (arriba/abajo).
 
-Evento `format-tab-title`: personaliza el título de cada pestaña mostrando:
+---
 
-- Índice y título del panel activo.
-- Un ícono de estado según si hay salida no vista (`has_unseen_output`):
-    - **Sin novedades:** ícono gris `󰄰`.
-    - **PowerShell con actividad:** ícono rojo `󰄯` (color `#9e1c1c`).
-    - **Otro proceso con actividad:** ícono verde `󰄯` (color `#179937`).
+## 5. Pestañas con Título Dinámico
 
-## 6. Barra de estado (esquina derecha)
+El evento `format-tab-title` computa el estado de los procesos en segundo plano de cada pestaña:
 
-Evento `update-status`: en la esquina derecha de la barra de pestañas muestra:
+- **Estructura:** Número de pestaña + título del proceso.
+- **Indicador de actividad (`has_unseen_output`):**
+  - **Sin novedades / Inactiva:** Ícono gris `󰄰` (`#666666`).
+  - **PowerShell con salida no vista:** Ícono rojo `󰄯` (`#9e1c1c`).
+  - **Otro proceso activo con salida:** Ícono verde `󰄯` (`#179937`).
 
-- El nombre del **workspace** activo.
-- Si hay un proceso en primer plano distinto de `pwsh`, muestra su nombre y PID: `nombre_proceso (PID xxxx)`.
+---
 
-## 7. Programa por defecto
+## 6. Barra de Estado (Esquina Superior Derecha)
 
-Shell predeterminado al abrir una nueva terminal: `pwsh.exe` (PowerShell 7).
+El evento `update-status` muestra información contextual en tiempo real:
 
-## 8. Leader Key
+- **Workspace activo:** Ícono ` ` seguido del nombre del espacio de trabajo en color `#5C8374`.
+- **Monitoreo de procesos:** Si se está ejecutando un proceso en primer plano distinto a la shell base (`pwsh`), muestra `󰛸 nombre_proceso (PID xxxx)`.
 
-- Combinación: `Ctrl+a`.
-- Tiempo de espera: `1000 ms` para presionar la siguiente tecla (estilo tmux).
+---
 
-## 9. Menú de lanzamiento (`launch_menu`)
+## 7. Shell Predeterminado
 
-Se abre con **`Ctrl+Shift+B`**. Comandos predefinidos:
+- **Programa por defecto:** `pwsh.exe` (PowerShell 7) en modo 64 bits.
 
-|Etiqueta|Acción|
+---
+
+## 8. Tecla Líder (*Leader Key*)
+
+- **Combinación:** `Ctrl + a` (estilo Tmux).
+- **Tiempo de espera:** `1000 ms` para accionar la combinación secundaria.
+
+---
+
+## 9. Menú de Lanzamiento Rápido (`launch_menu`)
+
+Se abre con la combinación **`Ctrl + Shift + B`** y proporciona acceso inmediato a proyectos y configuraciones:
+
+| Ícono / Etiqueta | Acción Ejecutada |
 |---|---|
-|KINETIC Workspace|Entra al proyecto `SINTETIZADOR-SOLIDJS` y ejecuta `bun run dev`|
-|PORTFOLIO Workspace|Entra al proyecto `portfolio` y ejecuta `bun run dev`|
-|📝 Abrir wezterm.lua|Abre el archivo de configuración con la app predeterminada|
+| `󰽰  KINETIC Workspace` | Abre el proyecto `SINTETIZADOR-SOLIDJS` y corre `bun run dev` |
+| `  PORTFOLIO Workspace` | Abre el proyecto `portfolio` y corre `bun run dev` |
+| `  Abrir wezterm.lua` | Abre la configuración de WezTerm en el editor por defecto |
+| `  Abrir starship.toml` | Abre la configuración de Starship en el editor por defecto |
 
-## 10. Menú de atajos (`Ctrl+Shift+K`)
+---
 
-Selector interactivo (con búsqueda difusa) que lista los atajos disponibles y ejecuta la acción real de WezTerm al elegir uno:
+## 10. Menú Interactivo de Atajos (`Ctrl + Shift + K`)
 
-|Atajo|Acción|
+Selector con búsqueda difusa (*fuzzy search*) integrado vía `InputSelector` que documenta y ejecuta las acciones directamente:
+
+| Atajo | Acción |
 |---|---|
-|`Alt+V`|Dividir panel verticalmente|
-|`Alt+H`|Dividir panel horizontalmente|
-|`Alt+←`|Ir al panel de la izquierda|
-|`Alt+→`|Ir al panel de la derecha|
-|`Alt+↑`|Ir al panel de arriba|
-|`Alt+↓`|Ir al panel de abajo|
-|`Alt+W`|Cerrar el panel actual (con confirmación)|
-|`Alt+Z`|Maximizar/restaurar el panel actual|
-|`Alt+T`|Abrir una nueva pestaña|
-|`Ctrl+Tab`|Ir a la siguiente pestaña|
-|`Ctrl+Shift+Tab`|Ir a la pestaña anterior|
-|`Alt+Enter`|Pantalla completa|
-|`Ctrl+Shift+L`|Limpiar el scrollback|
-|`Ctrl+Shift+P`|Paleta de comandos de WezTerm|
-|`Ctrl+Shift+B`|Menú de comandos (launch_menu)|
+| `Alt + V` | Dividir panel verticalmente |
+| `Alt + H` | Dividir panel horizontalmente |
+| `Alt + ←` | Mover foco al panel de la izquierda |
+| `Alt + →` | Mover foco al panel de la derecha |
+| `Alt + ↑` | Mover foco al panel superior |
+| `Alt + ↓` | Mover foco al panel inferior |
+| `Alt + W` | Cerrar panel actual (con diálogo de confirmación) |
+| `Alt + Z` | Alternar modo maximizado (*zoom*) del panel |
+| `Alt + T` | Crear nueva pestaña |
+| `Ctrl + Tab` | Navegar a la pestaña siguiente |
+| `Ctrl + Shift + Tab` | Navegar a la pestaña anterior |
+| `Alt + Enter` | Alternar pantalla completa |
+| `Ctrl + Shift + L` | Limpiar historial de scroll (*scrollback*) |
+| `Ctrl + Shift + P` | Abrir la paleta de comandos de WezTerm |
+| `Ctrl + Shift + B` | Abrir el menú de lanzadores (*launch_menu*) |
 
-## 11. Atajos de teclado (`config.keys`)
+---
 
-### Generales
+## 11. Mapa de Atajos de Teclado (`config.keys`)
 
-|Atajo|Acción|
+### Paneles y Ventanas
+
+| Combinación | Acción |
 |---|---|
-|`Alt+Enter`|Pantalla completa|
-|`Ctrl+Shift+L`|Limpiar scrollback|
-
-### Paneles
-
-|Atajo|Acción|
-|---|---|
-|`Alt+V`|Dividir verticalmente|
-|`Alt+H`|Dividir horizontalmente|
-|`Alt+←/→/↑/↓`|Navegar entre paneles|
-|`Alt+W`|Cerrar panel actual (con confirmación)|
-|`Alt+Z`|Maximizar/restaurar panel|
+| `Alt + V` | `SplitVertical` (panel vertical) |
+| `Alt + H` | `SplitHorizontal` (panel horizontal) |
+| `Alt + Flechas` | Navegación direccional entre paneles |
+| `Alt + W` | Cerrar panel actual |
+| `Alt + Z` | Maximizar / restaurar tamaño del panel |
+| `Alt + Enter` | Pantalla completa |
+| `Ctrl + Shift + L` | Limpiar buffer de scroll |
 
 ### Pestañas
 
-|Atajo|Acción|
+| Combinación | Acción |
 |---|---|
-|`Alt+T`|Nueva pestaña|
-|`Ctrl+Tab`|Siguiente pestaña|
-|`Ctrl+Shift+Tab`|Pestaña anterior|
+| `Alt + T` | Crear pestaña en el dominio actual |
+| `Ctrl + Tab` | Ir a pestaña siguiente |
+| `Ctrl + Shift + Tab` | Ir a pestaña anterior |
 
-### Menús y paletas
+### Redimensionamiento con Tecla Líder (`Ctrl + a`)
 
-|Atajo|Acción|
+| Combinación | Acción |
 |---|---|
-|`Ctrl+Shift+B`|Menú de comandos (launch_menu)|
-|`Ctrl+Shift+K`|Menú de atajos con descripción|
-|`Ctrl+Shift+P`|Paleta de comandos de WezTerm|
+| `Leader + ←` | Reducir / ajustar 5 px a la izquierda |
+| `Leader + →` | Reducir / ajustar 5 px a la derecha |
+| `Leader + ↑` | Reducir / ajustar 5 px hacia arriba |
+| `Leader + ↓` | Reducir / ajustar 5 px hacia abajo |
 
-### Redimensionar paneles (con Leader `Ctrl+a`)
+---
 
-|Atajo|Acción|
+## 12. Acciones Rápidas en la Paleta de Comandos (`Ctrl + Shift + P`)
+
+Comandos inyectados mediante `augment-command-palette`:
+
+| Nombre en Paleta | Comando Enviado |
 |---|---|
-|`Leader + ←`|Reducir panel hacia la izquierda (5px)|
-|`Leader + →`|Reducir panel hacia la derecha (5px)|
-|`Leader + ↑`|Reducir panel hacia arriba (5px)|
-|`Leader + ↓`|Reducir panel hacia abajo (5px)|
+| **Docker: Levantar compose** | `docker compose up -d` |
+| **Git: status** | `git status` |
+| **Sistema: uso de disco** | `Get-PSDrive -PSProvider FileSystem` |
 
-## 12. Comandos rápidos en la paleta (`Ctrl+Shift+P`)
+---
 
-Evento `augment-command-palette`: agrega comandos personalizados a la paleta nativa de WezTerm:
-
-|Comando|Acción ejecutada|
-|---|---|
-|Docker: Levantar compose|`docker compose up -d`|
-|Git: status|`git status`|
-|Sistema: uso de disco|`Get-PSDrive -PSProvider FileSystem`|
-
-## Requisitos
+## 13. Requisitos
 
 - [WezTerm](https://wezterm.org/) instalado.
-- Fuente `JetBrains Mono` instalada en el sistema.
-- Fuente [Nerd Font](https://www.nerdfonts.com/) (o una que incluya sus glifos) para los íconos de estado.
-- `pwsh` (PowerShell 7) disponible en el `PATH`.
-- `bun` instalado, si se usan las entradas del `launch_menu` que lo invocan.
+- Fuente `JetBrains Mono` con soporte [Nerd Fonts](https://www.nerdfonts.com/).
+- `pwsh` (PowerShell 7) configurado en las variables de entorno.
+- `bun` para la ejecución de scripts de desarrollo en el menú de lanzamiento.
 
-## Ubicación del archivo
+---
 
-Colocar el archivo como `~/.wezterm.lua` (o `%USERPROFILE%\.wezterm.lua` en Windows).
+## 14. Ubicación del archivo
+
+- **Linux / macOS:** `~/.wezterm.lua`
+- **Windows:** `%USERPROFILE%\.wezterm.lua`

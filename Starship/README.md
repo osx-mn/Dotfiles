@@ -2,84 +2,90 @@
 
 Documentación del archivo `starship.toml`, el prompt personalizado para la terminal usando [Starship](https://starship.rs/).
 
-## Opciones generales
+## 1. Opciones generales
 
-|Opción|Valor|Descripción|
+| Opción | Valor | Descripción |
 |---|---|---|
-|`add_newline`|`false`|No inserta línea en blanco antes del prompt.|
-|`format`|ver abajo|Define el diseño del prompt principal (izquierda).|
-|`right_format`|`$cmd_duration`|Muestra la duración del último comando en el lado derecho.|
+| `add_newline` | `true` | Inserta una línea en blanco antes de cada nuevo prompt para mayor legibilidad. |
+| `format` | *Ver desglose* | Define el diseño del prompt principal en dos líneas (izquierda). |
+| `right_format` | `$cmd_duration` | Muestra la duración del último comando ejecutado en el extremo derecho. |
 
-### Estructura del prompt (`format`)
+---
+
+## 2. Estructura del prompt (`format`)
 
 ```
-╭─usuario@host directorio rama-git estado-git
+╭─  usuario@hostname │ directorio │ 󰊢 rama-git [estado-git]
 ╰─❯
 ```
 
-- **Línea 1:** usuario, hostname, directorio actual, rama de Git y estado de Git.
-- **Línea 2:** símbolo `❯` como indicador de entrada.
+- **Línea 1:** Ícono de sistema/usuario, nombre de usuario, hostname, separador, directorio actual, separador, rama Git y estado de sincronización / modificaciones.
+- **Línea 2:** Prefijo conector `╰─` y símbolo `❯` como indicador de entrada.
 
-## Módulos activos
+---
+
+## 3. Módulos activos
 
 ### `[username]`
-
-Muestra el usuario actual siempre (`show_always = true`).
-
-- Usuario normal: blanco en negrita.
-- Root: rojo en negrita.
+Muestra el usuario actual en todo momento (`show_always = true`) precedido por el ícono ``.
+- **Usuario estándar:** `bold white` (blanco en negrita).
+- **Usuario root:** `bold red` (rojo en negrita).
 
 ### `[hostname]`
-
-Muestra el hostname también fuera de sesiones SSH (`ssh_only = false`).
-
-- Formato: `@hostname` en blanco tenue.
+Muestra el hostname incluso fuera de sesiones SSH (`ssh_only = false`).
+- **Formato:** `@hostname` en blanco tenue (`dimmed white`).
 
 ### `[directory]`
-
-Muestra el directorio actual.
-
-- Color: cian en negrita.
-- Trunca a los últimos 3 directorios (`truncation_length = 3`).
-- No trunca a la raíz del repo Git (`truncate_to_repo = false`).
-- El símbolo `~` representa el home.
+Ruta del directorio de trabajo actual.
+- **Color:** `bold cyan` (cian en negrita).
+- **Longitud de truncamiento:** `3` niveles de directorio (`truncation_length = 3`).
+- **Truncamiento en repo Git:** `false` (mantiene la ruta relativa visible).
+- **Símbolo de Home:** `~`.
+- **Separador:** `│` en blanco tenue.
 
 ### `[git_branch]`
-
-Muestra la rama de Git activa con el símbolo .
+Muestra la rama activa de Git con el ícono `󰊢 `.
+- **Color:** `dimmed white`.
+- **Separador:** `│` en blanco tenue.
 
 ### `[git_status]`
+Muestra el estado detallado del repositorio Git en color amarillo (`yellow`), indicando la cantidad de cambios:
 
-Muestra el estado del repositorio Git (color amarillo), con símbolos para:
-
-|Estado|Símbolo|
-|---|---|
-|Conflictos|``|
-|Adelante (ahead)|``|
-|Atrás (behind)|``|
-|Divergente|`/`|
-|Sin seguimiento (untracked)|``|
-|Guardado (stash)|`󰆓`|
-|Modificado|``|
-|En stage|``|
-|Renombrado|`󰁕`|
-|Eliminado|``|
+| Estado | Símbolo | Descripción |
+|---|---|---|
+| Conflictos | `` | Archivos en conflicto de fusión |
+| Adelante (*ahead*) | `` | Commits por delante del remoto |
+| Atrás (*behind*) | `` | Commits por detrás del remoto |
+| Divergente | `` | Commits adelante y atrás simultáneamente |
+| Sin seguimiento (*untracked*) | `` | Nuevos archivos no rastreados |
+| Guardado (*stash*) | `󰆓` | Cambios en el stash |
+| Modificado | `` | Archivos modificados sin stage |
+| En stage | `` | Archivos preparados para commit |
+| Renombrado | `󰁕` | Archivos renombrados |
+| Eliminado | `` | Archivos borrados |
 
 ### `[cmd_duration]`
+Muestra la duración del comando en el extremo derecho si tarda **2 segundos o más** (`min_time = 2000`), incluyendo milisegundos (`show_milliseconds = true`).
+- **Formato:** `│ <duración>` en blanco tenue.
 
-Muestra la duración de comandos que tarden **2 segundos o más** (`min_time = 2000`), incluyendo milisegundos.
+---
 
-## Módulos desactivados
+## 4. Módulos desactivados
 
-Los siguientes módulos están explícitamente deshabilitados (`disabled = true`) para mantener el prompt limpio:
+Para mantener un prompt rápido, limpio y minimalista, los siguientes módulos de lenguajes y servicios están explícitamente desactivados (`disabled = true`):
 
 `package`, `nodejs`, `python`, `rust`, `golang`, `php`, `java`, `docker_context`, `conda`, `aws`, `gcloud`, `azure`, `terraform`, `kubernetes`, `memory_usage`, `time`
 
-## Requisitos
+---
 
-- [Starship](https://starship.rs/) instalado.
-- Fuente [Nerd Font](https://www.nerdfonts.com/) para renderizar correctamente los íconos/símbolos.
+## 5. Requisitos
 
-## Ubicación del archivo
+- [Starship](https://starship.rs/) instalado en el sistema.
+- Fuente [Nerd Font](https://www.nerdfonts.com/) (como *JetBrainsMono Nerd Font*) para renderizar los glifos e íconos.
 
-Colocar el archivo como `~/.config/starship.toml`.
+---
+
+## 6. Ubicación del archivo
+
+- **Linux / macOS:** `~/.config/starship.toml`
+- **Windows:** `%USERPROFILE%\.config\starship.toml` (o `$HOME\.config\starship.toml` en PowerShell)
